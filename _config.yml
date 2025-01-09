@@ -6,6 +6,8 @@
 # `jekyll serve -l -H localhost`. If you change this file, please restart the 
 # server process.
 
+theme_remote : academicpages
+
 # Basic Site Settings
 locale                   : "en-US"
 title                    : "Stephen Mrenna"
@@ -21,10 +23,10 @@ repository               : "smrenna/smrenna.github.io"
 #               Additional customization can be done by editing /_includes/author-profile.html
 author:
   # Biographic information
-  avatar           : "images/profile.png"
+  avatar           : "profile.png"
   name             : "Senior Scientist"
   #pronouns         : # example: "she/her"  
-  bio              : "Short biography for the left-hand sidebar"
+  bio              : "Scientific Computing and AI Directorate"
   location         : "Earth"
   employer         : "Fermilab"
   uri              : "http://www.fnal.gov"
