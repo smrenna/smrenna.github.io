@@ -3,11 +3,11 @@
 Personal site for Stephen Mrenna. Plain static HTML/CSS/JS — `index.html`, `style.css`,
 `script.js` — deployed by `.github/workflows/pages.yml` (no build step, no Jekyll).
 
-Publications and talks are rendered at load time from JSON files in `data/`, so most updates
-never touch `index.html`.
+Publications are rendered at load time from `data/publications.bib` (plain BibTeX) and talks
+from `data/talks.json`, so most updates never touch `index.html`.
 
 To preview locally, serve the directory (opening `index.html` directly via `file://` won't
-work — the browser blocks `fetch()` of local JSON files without a server):
+work — the browser blocks `fetch()` of local files without a server):
 
 ```
 python3 -m http.server
@@ -15,9 +15,15 @@ python3 -m http.server
 
 ## Editing
 
-- **Publications**: add/edit an entry in `data/publications.json`. Each group (`Pythia`,
-  `Machine Learning / AI`, `CMS Collaboration`) is a list of papers with `title`, `authors`,
-  `venue`, `year`, and `arxiv_id`. Group order on the page follows the array order.
+- **Publications**: add/edit an `@article{...}` entry in `data/publications.bib`. Recognized
+  fields are `title`, `author` (BibTeX `Last, First and Last2, First2` form — end with `and
+  others` for "et al."), `journal`, `year`, and `eprint` (arXiv id, used to build the arXiv
+  link). Every entry needs a custom `group` field set to exactly `Pythia`, `Machine Learning /
+  AI`, or `CMS Collaboration` — that's what sorts it into the right section (page order is
+  fixed to that order regardless of where the entry sits in the file). Write author names with
+  real UTF-8 characters (e.g. `Torbjörn`), not LaTeX escapes (`\"o`) — the page's parser doesn't
+  decode those. This is a small hand-rolled parser, not a full BibTeX implementation: no
+  `@string` macros, `crossref`, or comments on the same line as a field.
 - **Talks**: add an entry to `data/talks.json`, e.g.:
   ```json
   { "title": "...", "venue": "...", "location": "...", "date": "March 2026", "url": "https://..." }

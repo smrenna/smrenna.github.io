@@ -2,48 +2,161 @@ function arxivUrl(id) {
   return `https://arxiv.org/abs/${id}`;
 }
 
-function renderPublications(groups) {
+// Lightweight BibTeX parser for hand-written entries. Supports @type{key, field = {value}, ...}
+// with brace- or quote-delimited values (braces may nest) and bare values (e.g. year = 2024).
+// Does not support @string macros, crossref, or comments after a field on the same line.
+function parseBibtex(text) {
+  const entries = [];
+  let i = 0;
+  while (true) {
+    const at = text.indexOf("@", i);
+    if (at === -1) break;
+    let j = at + 1;
+    while (j < text.length && /[a-zA-Z]/.test(text[j])) j++;
+    const type = text.slice(at + 1, j).toLowerCase();
+    while (j < text.length && /\s/.test(text[j])) j++;
+    if (text[j] !== "{") { i = at + 1; continue; }
+    let depth = 0;
+    const start = j;
+    let k = j;
+    for (; k < text.length; k++) {
+      if (text[k] === "{") depth++;
+      else if (text[k] === "}") { depth--; if (depth === 0) { k++; break; } }
+    }
+    entries.push(parseEntryBody(type, text.slice(start + 1, k - 1)));
+    i = k;
+  }
+  return entries;
+}
+
+function parseEntryBody(type, body) {
+  let depth = 0;
+  let idx = 0;
+  for (; idx < body.length; idx++) {
+    const c = body[idx];
+    if (c === "{") depth++;
+    else if (c === "}") depth--;
+    else if (c === "," && depth === 0) break;
+  }
+  const key = body.slice(0, idx).trim();
+  const rest = body.slice(idx + 1);
+  const fields = {};
+
+  let pos = 0;
+  while (pos < rest.length) {
+    while (pos < rest.length && /[\s,]/.test(rest[pos])) pos++;
+    if (pos >= rest.length) break;
+
+    const nameStart = pos;
+    while (pos < rest.length && /[a-zA-Z0-9_]/.test(rest[pos])) pos++;
+    const name = rest.slice(nameStart, pos).toLowerCase();
+    if (!name) { pos++; continue; }
+
+    while (pos < rest.length && /\s/.test(rest[pos])) pos++;
+    if (rest[pos] !== "=") continue;
+    pos++;
+    while (pos < rest.length && /\s/.test(rest[pos])) pos++;
+
+    let value = "";
+    if (rest[pos] === "{") {
+      let d = 0;
+      const vstart = pos;
+      for (; pos < rest.length; pos++) {
+        if (rest[pos] === "{") d++;
+        else if (rest[pos] === "}") { d--; if (d === 0) { pos++; break; } }
+      }
+      value = rest.slice(vstart + 1, pos - 1);
+    } else if (rest[pos] === '"') {
+      const vstart = ++pos;
+      while (pos < rest.length && rest[pos] !== '"') pos++;
+      value = rest.slice(vstart, pos);
+      pos++;
+    } else {
+      const vstart = pos;
+      while (pos < rest.length && rest[pos] !== ",") pos++;
+      value = rest.slice(vstart, pos);
+    }
+
+    fields[name] = value.trim().replace(/\s+/g, " ");
+  }
+
+  return { type, key, fields };
+}
+
+// "Last, First and Last2, First2 and others" -> "F. Last, F. Last2, et al."
+// A piece with no comma (e.g. "CMS Collaboration") passes through unchanged.
+function formatAuthors(raw) {
+  return raw
+    .split(/\s+and\s+/i)
+    .map((p) => p.trim())
+    .filter(Boolean)
+    .map((p) => {
+      if (/^others$/i.test(p)) return "et al.";
+      if (!p.includes(",")) return p;
+      const [last, first] = p.split(",").map((s) => s.trim());
+      if (!first) return last;
+      const initials = first.split(/\s+/).map((w) => (w[0] ? `${w[0]}.` : "")).join(" ");
+      return `${initials} ${last}`;
+    })
+    .join(", ");
+}
+
+function renderPublications(bibText) {
   const containerIds = {
     "Pythia": "pub-group-pythia",
     "Machine Learning / AI": "pub-group-ml",
     "CMS Collaboration": "pub-group-cms"
   };
+  const groupOrder = ["Pythia", "Machine Learning / AI", "CMS Collaboration"];
 
-  for (const group of groups) {
-    const container = document.getElementById(containerIds[group.group]);
+  const entries = parseBibtex(bibText);
+  const byGroup = new Map(groupOrder.map((g) => [g, []]));
+  for (const entry of entries) {
+    const groupName = entry.fields.group;
+    if (byGroup.has(groupName)) byGroup.get(groupName).push(entry);
+  }
+
+  for (const groupName of groupOrder) {
+    const papers = byGroup.get(groupName);
+    if (!papers || papers.length === 0) continue;
+
+    const container = document.getElementById(containerIds[groupName]);
     if (!container) continue;
 
     const heading = document.createElement("h3");
     heading.className = "group-heading";
-    heading.textContent = group.group;
+    heading.textContent = groupName;
     container.appendChild(heading);
 
     const list = document.createElement("ul");
     list.className = "pub-list";
 
-    for (const paper of group.papers) {
+    for (const { fields } of papers) {
       const li = document.createElement("li");
 
       const title = document.createElement("span");
       title.className = "pub-title";
-      title.textContent = paper.title;
+      title.textContent = fields.title || "";
 
       const meta = document.createElement("span");
       meta.className = "pub-meta";
-      meta.textContent = `${paper.authors} — ${paper.venue}, ${paper.year}`;
-
-      const links = document.createElement("span");
-      links.className = "pub-links";
-      const a = document.createElement("a");
-      a.href = arxivUrl(paper.arxiv_id);
-      a.target = "_blank";
-      a.rel = "noopener";
-      a.textContent = `arXiv:${paper.arxiv_id}`;
-      links.appendChild(a);
+      meta.textContent = `${formatAuthors(fields.author || "")} — ${fields.journal || ""}, ${fields.year || ""}`;
 
       li.appendChild(title);
       li.appendChild(meta);
-      li.appendChild(links);
+
+      if (fields.eprint) {
+        const links = document.createElement("span");
+        links.className = "pub-links";
+        const a = document.createElement("a");
+        a.href = arxivUrl(fields.eprint);
+        a.target = "_blank";
+        a.rel = "noopener";
+        a.textContent = `arXiv:${fields.eprint}`;
+        links.appendChild(a);
+        li.appendChild(links);
+      }
+
       list.appendChild(li);
     }
 
@@ -90,8 +203,8 @@ function renderTalks(talks) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  fetch("data/publications.json")
-    .then((res) => res.json())
+  fetch("data/publications.bib")
+    .then((res) => res.text())
     .then(renderPublications)
     .catch((err) => console.error("Failed to load publications:", err));
 
