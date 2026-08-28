@@ -40,8 +40,3 @@ python3 -m http.server
 - **CV**: drop a PDF at `files/cv.pdf` (the "Download CV" link already points there).
 - **Contact links**: edit the `<section id="contact">` block in `index.html` directly (rarely changes).
 - **Research blurbs**: edit the `<section id="research">` block in `index.html` directly.
-
-## Legacy site
-
-The previous Jekyll site (built on the [academicpages](https://github.com/academicpages/academicpages.github.io)
-theme) is preserved under `legacy-jekyll-site/` for reference. It is not part of the deployed site.

@@ -1,10 +1,2 @@
 .DS_Store
 .inspire_cache.json
-
-# Legacy Jekyll site (kept for reference, not part of the live build)
-legacy-jekyll-site/_site/
-legacy-jekyll-site/.sass-cache/
-legacy-jekyll-site/local/
-legacy-jekyll-site/node_modules
-legacy-jekyll-site/package-lock.json
-legacy-jekyll-site/Gemfile.lock
