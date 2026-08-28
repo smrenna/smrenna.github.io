@@ -24,11 +24,19 @@ python3 -m http.server
   real UTF-8 characters (e.g. `Torbjörn`), not LaTeX escapes (`\"o`) — the page's parser doesn't
   decode those. This is a small hand-rolled parser, not a full BibTeX implementation: no
   `@string` macros, `crossref`, or comments on the same line as a field.
-- **Talks**: add an entry to `data/talks.json`, e.g.:
+- **Talks**: add an entry to `data/talks.json` with `title`, `venue`, `location`, `date`
+  (`url` is optional, for linking out to e.g. a conference's talk page):
   ```json
-  { "title": "...", "venue": "...", "location": "...", "date": "March 2026", "url": "https://..." }
+  { "title": "Pythia at LHCP", "venue": "LHCP 2026", "location": "CERN", "date": "March 2026" }
   ```
-  `url` is optional. The "coming soon" note disappears automatically once the array is non-empty.
+  The slides link is fully automatic — there's no filename field to keep in sync. The page
+  computes the expected PDF path as `files/talks/<slug of date>-<slug of title>.pdf` (lowercase,
+  accents stripped, everything but letters/digits collapsed to hyphens) and only shows a
+  "Slides" link if a file actually exists there. For the example above, upload the PDF as
+  `files/talks/march-2026-pythia-at-lhcp.pdf`. Rename the title in `talks.json` and the
+  expected filename changes with it — no second place to update, and a mismatched name just
+  means no "Slides" link shows up rather than a broken one. The "coming soon" note disappears
+  automatically once the array is non-empty.
 - **CV**: drop a PDF at `files/cv.pdf` (the "Download CV" link already points there).
 - **Contact links**: edit the `<section id="contact">` block in `index.html` directly (rarely changes).
 - **Research blurbs**: edit the `<section id="research">` block in `index.html` directly.

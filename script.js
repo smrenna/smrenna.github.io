@@ -164,6 +164,33 @@ function renderPublications(bibText) {
   }
 }
 
+// "March 2026" -> "march-2026"; strips accents, collapses non-alphanumerics to hyphens.
+function slugify(s) {
+  return (s || "")
+    .toString()
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+// The slides PDF a talk is expected to link to, derived from its date + title so the
+// filename can never drift out of sync with the metadata: rename the title, the expected
+// file name changes with it. No entry in talks.json needs to name the file explicitly.
+function talkSlidesPath(talk) {
+  return `files/talks/${slugify(talk.date)}-${slugify(talk.title)}.pdf`;
+}
+
+async function fileExists(path) {
+  try {
+    const res = await fetch(path, { method: "HEAD" });
+    return res.ok;
+  } catch {
+    return false;
+  }
+}
+
 function renderTalks(talks) {
   if (!talks || talks.length === 0) return;
 
@@ -186,19 +213,31 @@ function renderTalks(talks) {
     li.appendChild(title);
     li.appendChild(meta);
 
-    if (talk.url) {
-      const links = document.createElement("span");
-      links.className = "talk-links";
-      const a = document.createElement("a");
-      a.href = talk.url;
-      a.target = "_blank";
-      a.rel = "noopener";
-      a.textContent = "More info";
-      links.appendChild(a);
-      li.appendChild(links);
-    }
-
+    const links = document.createElement("span");
+    links.className = "talk-links";
+    li.appendChild(links);
     list.appendChild(li);
+
+    // Populated asynchronously once we know whether the matching slides PDF exists,
+    // so a talk with no uploaded slides just renders without a "Slides" link.
+    const slidesPath = talkSlidesPath(talk);
+    fileExists(slidesPath).then((exists) => {
+      if (exists) {
+        const a = document.createElement("a");
+        a.href = slidesPath;
+        a.textContent = "Slides";
+        links.appendChild(a);
+      }
+      if (talk.url) {
+        if (links.childNodes.length) links.appendChild(document.createTextNode(" · "));
+        const a = document.createElement("a");
+        a.href = talk.url;
+        a.target = "_blank";
+        a.rel = "noopener";
+        a.textContent = "More info";
+        links.appendChild(a);
+      }
+    });
   }
 }
 
