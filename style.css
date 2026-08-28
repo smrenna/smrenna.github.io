@@ -75,12 +75,7 @@ main {
   height: 84px;
   border-radius: 50%;
   border: 1px solid var(--border);
-  color: var(--text-muted);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.3rem;
-  letter-spacing: 0.02em;
+  object-fit: cover;
 }
 
 .intro h1 {
