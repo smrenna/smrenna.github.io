@@ -9,6 +9,7 @@
 
 theme_remote : academicpages
 
+remote_theme : academicpages
 # Basic Site Settings
 locale                   : "en-US"
 title                    : "Stephen Mrenna"
