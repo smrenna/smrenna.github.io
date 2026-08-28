@@ -1,13 +1,10 @@
-# Ignore the contents of the _site directory and other cache directories
-_site/
-.sass-cache/
+.DS_Store
+.inspire_cache.json
 
-# Ignore the directory for local files during development
-local/
-
-# Ignore the Gemfile that is generated
-Gemfile.lock
-
-# Ingore files created by npm
-node_modules
-package-lock.json
+# Legacy Jekyll site (kept for reference, not part of the live build)
+legacy-jekyll-site/_site/
+legacy-jekyll-site/.sass-cache/
+legacy-jekyll-site/local/
+legacy-jekyll-site/node_modules
+legacy-jekyll-site/package-lock.json
+legacy-jekyll-site/Gemfile.lock

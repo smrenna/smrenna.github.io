@@ -1,0 +1,192 @@
+:root {
+  --bg: #ffffff;
+  --text: #1b1f23;
+  --text-muted: #57606a;
+  --link: #0969da;
+  --border: #d8dee4;
+  --max-width: 720px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  line-height: 1.65;
+}
+
+h1, h2, h3 {
+  font-family: inherit;
+  font-weight: 600;
+  color: var(--text);
+}
+
+a {
+  color: var(--link);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.site-header {
+  border-bottom: 1px solid var(--border);
+}
+
+.nav {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 1rem 1.25rem;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.1rem;
+  font-size: 0.95rem;
+}
+
+.nav a {
+  color: var(--text);
+}
+
+.nav a:hover {
+  color: var(--link);
+}
+
+main {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 2.5rem 1.25rem 1rem;
+}
+
+.intro {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.avatar {
+  flex: none;
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  letter-spacing: 0.02em;
+}
+
+.intro h1 {
+  margin: 0 0 0.15rem;
+  font-size: 1.7rem;
+}
+
+.title {
+  margin: 0 0 0.7rem;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.intro p:last-child {
+  margin: 0;
+}
+
+.divider {
+  max-width: var(--max-width);
+  margin: 2.25rem auto;
+  border: none;
+  border-top: 1px solid var(--border);
+}
+
+section {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  scroll-margin-top: 1.5rem;
+}
+
+section h2 {
+  font-size: 1.3rem;
+  margin: 0 0 0.75rem;
+}
+
+.section-note {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+  margin-top: 0;
+}
+
+.section-note.placeholder {
+  font-style: italic;
+}
+
+.group-heading {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 1.5rem 0 0.6rem;
+}
+
+.pub-list, .talk-list, .contact-list {
+  list-style: none;
+  margin: 0 0 1rem;
+  padding: 0;
+}
+
+.pub-list li, .talk-list li {
+  padding: 0.6rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.pub-title, .talk-title {
+  font-weight: 600;
+}
+
+.pub-meta, .talk-meta {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.pub-links, .talk-links {
+  font-size: 0.88rem;
+}
+
+.contact-list li {
+  display: flex;
+  gap: 0.6rem;
+  padding: 0.35rem 0;
+  font-size: 0.95rem;
+}
+
+.contact-list .label {
+  flex: none;
+  width: 110px;
+  color: var(--text-muted);
+}
+
+.site-footer {
+  max-width: var(--max-width);
+  margin: 2rem auto 0;
+  padding: 1.5rem 1.25rem 2.5rem;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  border-top: 1px solid var(--border);
+}
+
+@media (max-width: 480px) {
+  .intro {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+  .nav {
+    gap: 0.4rem 0.8rem;
+  }
+}
