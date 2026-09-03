@@ -105,9 +105,10 @@ function renderPublications(bibText) {
   const containerIds = {
     "Pythia": "pub-group-pythia",
     "Machine Learning / AI": "pub-group-ml",
-    "CMS Collaboration": "pub-group-cms"
+    "CMS Collaboration": "pub-group-cms",
+    "Quantum": "pub-group-quantum"
   };
-  const groupOrder = ["Pythia", "Machine Learning / AI", "CMS Collaboration"];
+  const groupOrder = ["Pythia", "Machine Learning / AI", "Quantum", "CMS Collaboration"];
 
   const entries = parseBibtex(bibText);
   const byGroup = new Map(groupOrder.map((g) => [g, []]));
