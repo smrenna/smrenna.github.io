@@ -1,8 +1,47 @@
 [
   {
+    "title": "AI Policy in Pythia Software Development",
+    "venue": "HSF Software Technology Forum: Responsible AI-assisted coding and common training aspects",
+    "location": "CERN",
+    "date": "October 21, 2026",
+    "url": "https://indico.cern.ch/event/1739582/"
+  },
+  {
+    "title": "AI for Theory",
+    "venue": "CLARIPHY AI Collaboration Meeting (plenary)",
+    "location": "University of Wisconsin–Madison",
+    "date": "September 14, 2026"
+  },
+  {
+    "title": "Community Vision",
+    "venue": "Agentic AI for BSM Event Generation and Analysis Workshop at the LPC",
+    "location": "Fermilab, Batavia, IL",
+    "date": "September 9, 2026",
+    "url": "https://indico.fnal.gov/event/75639/"
+  },
+  {
     "title": "HEPTAPOD: An AI Framework — BSM Idea to Event Analysis",
     "venue": "Fermilab",
     "location": "Batavia, IL",
     "date": "August 3, 2026"
+  },
+  {
+    "title": "Hadronization Models in Event Generation",
+    "venue": "IQuS workshop “From String Dynamics to Event Generation with Quantum Simulation”",
+    "location": "University of Washington, Seattle, WA",
+    "date": "April 2026",
+    "url": "https://iqus.uw.edu/events/eventgen2026/"
+  },
+  {
+    "title": "Uncertainty, LHC Event Generators, and Pythia8",
+    "venue": "INT Workshop INT-23-86W, Theoretical Physics Uncertainties to Empower Neutrino Experiments",
+    "location": "Institute for Nuclear Theory, Seattle, WA",
+    "date": "October 2023"
+  },
+  {
+    "title": "Event Generators and Pythia8",
+    "venue": "High Energy Theory Seminar",
+    "location": "University of Cincinnati",
+    "date": "October 2023"
   }
 ]
